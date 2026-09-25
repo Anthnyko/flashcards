@@ -13,4 +13,6 @@ class Card(Base):
     deck_id = Column(Integer, ForeignKey("decks.id"), nullable=False)
     
     deck = relationship("Deck", back_populates="cards")
+    tags = relationship("Tag", secondary="card_tags", back_populates="cards")
+
         
