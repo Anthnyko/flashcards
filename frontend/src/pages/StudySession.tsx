@@ -1,0 +1,17 @@
+import { useCallback, useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import axios from 'axios'
+import { getNextCard, getProgress, startSession, submitAnswer, type Progress, type StudyCard } from '../api/study'
+
+export default function StudySession() {
+  const { id } = useParams(); const deckId = Number(id); const [card, setCard] = useState<StudyCard | null>(null); const [progress, setProgress] = useState<Progress | null>(null); const [revealed, setRevealed] = useState(false); const [complete, setComplete] = useState(false); const [loading, setLoading] = useState(true); const [error, setError] = useState('')
+  const next = useCallback(async () => { const response = await getNextCard(deckId); const result = response.card ?? (response.card_id ? { card_id: response.card_id, front: response.front ?? '', back: response.back ?? '' } : null); setCard(result); setComplete(!result); setRevealed(false) }, [deckId])
+  const setup = useCallback(async () => { setLoading(true); try { await startSession(deckId); await Promise.all([next(), getProgress(deckId).then(setProgress)]) } catch (err) { setError(axios.isAxiosError(err) ? err.response?.data?.detail ?? 'Could not start study session.' : 'Could not start study session.') } finally { setLoading(false) } }, [deckId, next])
+  useEffect(() => { if (Number.isInteger(deckId)) void setup() }, [deckId, setup])
+  const answer = async (wasCorrect: boolean) => { if (!card) return; setLoading(true); try { await submitAnswer(card.card_id, wasCorrect); await Promise.all([next(), getProgress(deckId).then(setProgress)]) } catch { setError('Could not record your answer.') } finally { setLoading(false) } }
+  if (!Number.isInteger(deckId)) return <main className="page-container">Invalid deck.</main>
+  return <main className="page-container max-w-3xl"><Link to={`/deck/${deckId}`} className="text-sm font-medium text-indigo-700 hover:underline">← Back to deck</Link><div className="mt-4 flex items-end justify-between"><div><h1 className="text-3xl font-bold">Study session</h1><p className="mt-1 text-sm text-slate-500">{progress ? `${progress.new_cards} new · ${progress.due_cards} due` : 'Preparing your cards…'}</p></div></div>
+    {error && <p className="mt-5 rounded-lg bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
+    {loading && !card && !complete ? <p className="mt-8 text-slate-500">Loading next card…</p> : complete ? <section className="panel mt-8 text-center"><h2 className="text-2xl font-bold">Session complete</h2><p className="mt-2 text-slate-500">There are no more cards to study right now.</p><Link className="button-primary mt-5" to={`/deck/${deckId}`}>Back to deck</Link></section> : card && <section className="panel mt-8"><p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">Question</p><p className="mt-4 min-h-24 whitespace-pre-wrap text-xl">{card.front}</p>{revealed ? <div className="mt-8 border-t border-slate-200 pt-5"><p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">Answer</p><p className="mt-3 whitespace-pre-wrap text-lg">{card.back}</p><div className="mt-7 grid gap-3 sm:grid-cols-2"><button className="button-danger py-3" onClick={() => void answer(false)} disabled={loading}>I got it wrong</button><button className="button-primary py-3" onClick={() => void answer(true)} disabled={loading}>I got it right</button></div></div> : <button className="button-primary mt-8 w-full py-3" onClick={() => setRevealed(true)}>Reveal answer</button>}</section>}
+  </main>
+}
