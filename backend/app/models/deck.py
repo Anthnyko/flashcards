@@ -13,4 +13,4 @@ class Deck(Base):
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     owner = relationship("User", back_populates="decks") # connects User database and deck database for easy access
-    cards = relationship("Card", back_populates="decks", cascade="all, delete") # connects cards to a deck, deleting the deck deletes its cards
+    cards = relationship("Card", back_populates="deck", cascade="all, delete-orphan")

@@ -9,9 +9,9 @@ class ReviewHistory(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    user_id = Column(Integer, ForeignKey("user.id"), nullable=False) # who reviewed
-    deck_id = Column(Integer, ForeignKey("deck.id"), nullable=False) # which deck it belongs to
-    card_id = Column(Integer, ForeignKey("card.id"), nullable=False) # which card was reviewed
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    deck_id = Column(Integer, ForeignKey("decks.id"), nullable=False)
+    card_id = Column(Integer, ForeignKey("cards.id"), nullable=False)
 
     timestamp = Column(DateTime, default=datetime.utcnow) # when
     was_correct = Column(Boolean, nullable=False) # did user remember

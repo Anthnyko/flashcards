@@ -15,7 +15,7 @@ class ReviewHistoryOut(ReviewHistoryBase):
     timestamp: datetime
     interval: int
     ease_factor: int
-    next_review_time: datetime
+    next_review_date: datetime
 
     class Config:
         from_attributes = True

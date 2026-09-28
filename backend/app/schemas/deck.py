@@ -5,8 +5,11 @@ class DeckBase(BaseModel):
     description: str | None = None # allows for no description
 
 class DeckCreate(DeckBase):
+    pass
+
+class DeckOut(DeckBase):
     id: int
-    owner_id: int
+    due_cards: int = 0
 
     class Config:
         from_attributes = True # allows pydantic to read ORM objects

@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Optional
+from app.core.config import settings
 
 from jose import jwt, JWTError
 from passlib.context import CryptContext
@@ -14,9 +15,9 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 # JWT configuration
-SECRET_KEY = "supersecretkey123"  # replace later with env variable
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+SECRET_KEY = settings.JWT_SECRET
+ALGORITHM = settings.JWT_ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
