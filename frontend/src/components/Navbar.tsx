@@ -9,7 +9,7 @@ export default function Navbar() {
 
   return <header className="border-b border-slate-200 bg-white">
     <nav className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
-      <Link to="/" className="mr-3 text-xl font-bold tracking-tight text-indigo-700">Recall</Link>
+      <Link to="/" className="mr-3 text-xl font-bold tracking-tight text-indigo-700">Flashcard Manager</Link>
       <NavLink to="/" end className={linkClass}>Dashboard</NavLink>
       <NavLink to="/search" className={linkClass}>Search</NavLink>
       <div className="ml-auto flex items-center gap-3">

@@ -6,8 +6,8 @@ from app.db.base import Base
 card_tags = Table(
     "card_tags",
     Base.metadata,
-    Column("card_id", Integer, ForeignKey("cards.id")),
-    Column("tag_id", Integer, ForeignKey("tags.id"))
+    Column("card_id", Integer, ForeignKey("cards.id"), primary_key=True),
+    Column("tag_id", Integer, ForeignKey("tags.id"), primary_key=True),
 )
 
 class Tag(Base):
