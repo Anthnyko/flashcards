@@ -8,3 +8,7 @@ export const startSession = async (deckId: number) => api.post(`/study/start/${d
 export const getNextCard = async (deckId: number) => (await api.get<NextCardResponse>(`/study/next-card/${deckId}`)).data
 export const submitAnswer = async (cardId: number, wasCorrect: boolean) => api.post('/study/submit-answer', null, { params: { card_id: cardId, was_correct: wasCorrect } })
 export const getProgress = async (deckId: number) => (await api.get<Progress>(`/study/progress/${deckId}`)).data
+export async function getPracticeCards(deckId: number) {
+  const response = await api.get(`/study/practice/${deckId}`)
+  return response.data
+}

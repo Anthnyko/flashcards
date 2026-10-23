@@ -7,6 +7,7 @@ import Dashboard from '../pages/Dashboard'
 import DeckView from '../pages/DeckView'
 import CardEditor from '../pages/CardEditor'
 import StudySession from '../pages/StudySession'
+import PracticeSession from '../pages/PracticeSession'
 import Search from '../pages/Search'
 
 function ProtectedLayout() {
@@ -25,6 +26,7 @@ export default function AppRouter() {
       <Route path="/deck/:id" element={<DeckView />} />
       <Route path="/deck/:id/edit" element={<CardEditor />} />
       <Route path="/study/:id" element={<StudySession />} />
+      <Route path="/practice/:id" element={<PracticeSession />} />
       <Route path="/search" element={<Search />} />
     </Route>
     <Route path="*" element={<Navigate to="/" replace />} />
