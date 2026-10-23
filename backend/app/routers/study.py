@@ -132,6 +132,21 @@ def submit_answer(
     }
 
 
+@router.get("/practice/{deck_id}")
+def get_practice_cards(
+    deck_id: int,
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user)
+):
+    cards = (
+        db.query(Card)
+        .filter(Card.deck_id == deck_id)
+        .all()
+    )
+
+    return cards
+
+
 @router.get("/progress/{deck_id}")
 def study_progress(
     deck_id: int,
